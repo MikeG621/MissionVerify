@@ -1,12 +1,26 @@
+/*
+ * MissionVerify.exe, X-wing series mission validation utility, TIE95-XWA
+ * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
+ * Licensed under the MPL v2.0 or later
+ * 
+ * Version: 2.0 (pending)
+ */
+
+/* CHANGELOG
+ * v2.0,
+ * [UPD] Converted to current standards
+ * [UPD] Implemented Idmr.Platform
+ * [UPD] Removed Containers, probes, satellites, backdrops, etc from AI and Orders checks
+ */
 using Idmr.Platform;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MissionVerify
+namespace Idmr.MissionVerify
 {
-	public partial class frmResults : System.Windows.Forms.Form
+	public partial class ResultsForm : Form
 	{
-		public frmResults(string file)
+		public ResultsForm(string file)
 		{
 			InitializeComponent();
 			FileStream fsFile;
@@ -54,30 +68,29 @@ namespace MissionVerify
 			Show();
 		}
 
-
 		private void cmdOK_Click(object sender, System.EventArgs e)
 		{
 			Dispose();
 		}
+
 		private string[] TIE(FileStream fsFile)
 		{
-			Idmr.Platform.Tie.Mission mission = new Idmr.Platform.Tie.Mission(fsFile);
+			Platform.Tie.Mission mission = new Platform.Tie.Mission(fsFile);
 			fsFile.Close();
 			int temp, iCraft = 0;	//consts and temp
 			int i = 0;		//string counter
 			string[] strResults = new string[50];
 			string playerFG = "";
 			bool bFail = false;
-			fsFile.Position = 2;
-			if (mission.FlightGroups.Count > Idmr.Platform.Tie.Mission.FlightGroupLimit)
+			if (mission.FlightGroups.Count > Platform.Tie.Mission.FlightGroupLimit)
 				strResults[i++] = "**Warning, mission has more than 48 Flight Groups, mission is NOT flyable.";
 			if (mission.Messages.Count == 0) 
 				strResults[i++] = "Mission has no in-flight messages.";
-			if (mission.Messages.Count > Idmr.Platform.Tie.Mission.MessageLimit)
+			if (mission.Messages.Count > Platform.Tie.Mission.MessageLimit)
 				strResults[i++] = "**Mission has more than 16 in-flight messages, errors will occur.";
 			if (mission.EndOfMissionMessages[0] == "")
 				strResults[i++] = "No Mission Complete message";
-			foreach (Idmr.Platform.Tie.FlightGroup fg in mission.FlightGroups)
+			foreach (Platform.Tie.FlightGroup fg in mission.FlightGroups)
 			{
 				iCraft += fg.NumberOfCraft;
 				if (fg.PlayerCraft != 0)
@@ -89,21 +102,21 @@ namespace MissionVerify
 			}
 			if (playerFG == "")
 				strResults[i++] = "**No player craft";
-			if (iCraft > Idmr.Platform.Tie.Mission.CraftLimit)
+			if (iCraft > Platform.Tie.Mission.CraftLimit)
 				strResults[i++] = "*More than 28 craft, ensure not all exist concurrently";
 			bFail = false;
-			foreach (Idmr.Platform.Tie.FlightGroup fg in mission.FlightGroups)
+			foreach (Platform.Tie.FlightGroup fg in mission.FlightGroups)
 			{
-				if (fg.AI == 0 && fg.CraftType != 0x56 && fg.CraftType != 0x57)
+				if (fg.AI == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType < 0x50)
 				{
 					strResults[i++] = (bFail ? "*" : "") + "Flight Group " + fg.Name + " has no AI" + (fg.Name == playerFG ? " (player" : "");
 					bFail = true;
 				}
 			}
 			bFail = false;
-			foreach (Idmr.Platform.Tie.FlightGroup fg in mission.FlightGroups)
+			foreach (Platform.Tie.FlightGroup fg in mission.FlightGroups)
 			{
-				if (fg.Orders[0].Command == 0 && fg.CraftType != 0x56 && fg.CraftType != 0x57)
+				if (fg.Orders[0].Command == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType < 0x50)
 				{
 					strResults[i] = (bFail ? "*" : "") + "Flight Group " + fg.Name + " has no orders" + (fg.Name == playerFG ? " (player" : "");
 					bFail = true;
@@ -112,19 +125,19 @@ namespace MissionVerify
 			bFail = false;
 			if (mission.GlobalGoals.Goals[0].Triggers[0].Condition != 10 &&
 				mission.GlobalGoals.Goals[0].Triggers[1].Condition == 10 &&
-				mission.GlobalGoals.Goals[0].T1AndOrT2 == true)
+				mission.GlobalGoals.Goals[0].T1AndOrT2 == false)
 			{
 				strResults[i++] = "**Primary Global goals are not completable";
 			}
 			if (mission.GlobalGoals.Goals[1].Triggers[0].Condition != 10 &&
 				mission.GlobalGoals.Goals[1].Triggers[1].Condition == 10 &&
-				mission.GlobalGoals.Goals[1].T1AndOrT2 == true)
+				mission.GlobalGoals.Goals[1].T1AndOrT2 == false)
 			{
 				strResults[i++] = "**Secondary Global goals are not completable";
 			}
 			if (mission.GlobalGoals.Goals[2].Triggers[0].Condition != 10 &&
 				mission.GlobalGoals.Goals[2].Triggers[1].Condition == 10 &&
-				mission.GlobalGoals.Goals[2].T1AndOrT2 == true)
+				mission.GlobalGoals.Goals[2].T1AndOrT2 == false)
 			{
 				strResults[i++] = "**Bonus Global goals are not completable";
 			}

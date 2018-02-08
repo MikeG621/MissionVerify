@@ -1,6 +1,6 @@
-namespace MissionVerify
+namespace Idmr.MissionVerify
 {
-	partial class frmMain
+	partial class MainForm
 	{
 		/// <summary>Required designer variable.</summary>
 		private System.ComponentModel.IContainer components = null;
@@ -19,7 +19,7 @@ namespace MissionVerify
 		#region Windows Form Designer generated code
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmMain));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.lblMain = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 

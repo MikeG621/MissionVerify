@@ -1,6 +1,19 @@
+/*
+ * MissionVerify.exe, X-wing series mission validation utility, TIE95-XWA
+ * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
+ * Licensed under the MPL v2.0 or later
+ * 
+ * Version: 2.0 (pending)
+ */
+
+/* CHANGELOG
+* v2.0,
+* [UPD] Converted to current standards
+*/
+
 using System.Windows.Forms;
 
-namespace MissionVerify
+namespace Idmr.MissionVerify
 {
 	/// <summary>
 	/// This program is to be used as a validation check for custom missions
@@ -23,9 +36,9 @@ namespace MissionVerify
 	/// *No pre-mission officer questions/Mission description
 	/// No post-mission questions
 	/// </summary>
-	public partial class frmMain : Form
+	public partial class MainForm : Form
 	{
-		public frmMain()
+		public MainForm()
 		{
 			InitializeComponent();
 		}
@@ -38,7 +51,7 @@ namespace MissionVerify
 				MessageBox.Show("Please check only one file at a time.", "Error");
 				return;
 			}
-			frmResults frmRes = new frmResults(args[0]);
+			ResultsForm frmRes = new ResultsForm(args[0]);
 		}
 
 		private void lblMain_DragEnter(object sender, DragEventArgs e)

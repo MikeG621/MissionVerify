@@ -1,6 +1,6 @@
-namespace MissionVerify
+namespace Idmr.MissionVerify
 {
-	partial class frmResults
+	partial class ResultsForm
 	{
 		/// <summary>Required designer variable.</summary>
 		private System.ComponentModel.IContainer components = null;
@@ -19,7 +19,7 @@ namespace MissionVerify
 		#region Windows Form Designer generated code
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmResults));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ResultsForm));
 			this.lblResult = new System.Windows.Forms.Label();
 			this.cmdOK = new System.Windows.Forms.Button();
 			this.txtResults = new System.Windows.Forms.TextBox();
