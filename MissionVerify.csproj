@@ -122,6 +122,9 @@
       <DependentUpon>ResultsForm.cs</DependentUpon>
     </Compile>
     <Content Include="App.ico" />
+    <None Include="MPL.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
