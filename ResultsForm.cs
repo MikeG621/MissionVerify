@@ -13,6 +13,7 @@
  * [UPD] Removed Containers, probes, satellites, backdrops, etc from AI and Orders checks
  * [UPD #3] AI messages changed "no AI" to "basic AI", removed failure indicator
  * [UPD #2] results string[] replaced with List<string>
+ * [UPD] Multiple player FGs now flagged as * instead of ** due to advanced creation techniques
  */
 using Idmr.Platform;
 using System.Collections.Generic;
@@ -97,7 +98,7 @@ namespace Idmr.MissionVerify
 				iCraft += fg.NumberOfCraft;
 				if (fg.PlayerCraft != 0)
 				{
-					results.Add((bFail ? "**" : "") + "Flight Group " + fg.Name + " is player craft");
+					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " is player craft");
 					if (!bFail) playerFG = fg.Name;
 					bFail = true;
 				}
@@ -110,17 +111,12 @@ namespace Idmr.MissionVerify
 			{
 				if (fg.AI == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType < 0x50)
 					results.Add("Flight Group " + fg.Name + " has basic AI" + (fg.Name == playerFG ? " (player" : ""));
-			}
-			bFail = false;
-			foreach (Platform.Tie.FlightGroup fg in mission.FlightGroups)
-			{
 				if (fg.Orders[0].Command == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType < 0x50)
 				{
 					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " has no orders" + (fg.Name == playerFG ? " (player" : ""));
 					bFail = true;
 				}
 			}
-			bFail = false;
 			if (mission.GlobalGoals.Goals[0].Triggers[0].Condition != 10 &&
 				mission.GlobalGoals.Goals[0].Triggers[1].Condition == 10 &&
 				mission.GlobalGoals.Goals[0].T1AndOrT2 == false)
@@ -158,68 +154,49 @@ namespace Idmr.MissionVerify
 
 		private string[] XvT(FileStream fsFile, bool BoP)
 		{
-			BinaryReader br = new BinaryReader(fsFile);
-			int FG, MESSAGE, temp, iCraft = 0;	//consts and temp
-			int iFG;        //position counters
+			Platform.Xvt.Mission mission = new Platform.Xvt.Mission(fsFile);
+			fsFile.Close();
+			int iCraft = 0;	//consts and temp
 			List<string> results = new List<string>();
 			bool bFail = false;
-			int playerFG = -1;
-			fsFile.Position = 2;
-			FG = br.ReadInt16();
-			MESSAGE = br.ReadInt16();
-			if (FG > 46)
+			string playerFG = "";
+			if (mission.FlightGroups.Count > Platform.Xvt.Mission.FlightGroupLimit)
 				results.Add("**Warning, more than 46 Flight Groups, mission may not be stable.");
-			if (MESSAGE == 0) 
+			if (mission.Messages.Count == 0) 
 				results.Add("Mission has no in-flight messages.");
-			if (MESSAGE > 64)
+			if (mission.Messages.Count > Platform.Xvt.Mission.MessageLimit)
 				results.Add("**Mission has more than 64 in-flight messages, errors will occur.");
-			fsFile.Position = 1480 + FG * 1378 + MESSAGE * 116;
-			temp = fsFile.ReadByte();
-			if (temp == 0) results.Add("No Mission Complete message.");
-			for (iFG = 1; iFG <= FG; iFG++)
+			if (mission.MissionSuccessful == "")
+				results.Add("No Mission Complete message.");
+			foreach (Platform.Xvt.FlightGroup fg in mission.FlightGroups)
 			{
-				fsFile.Position = iFG * 1378 - 1131;
-				temp = fsFile.ReadByte();
-				iCraft += temp + 1;
-				fsFile.Position += 16;
-				temp = fsFile.ReadByte();
-				if (temp != 0)
+				iCraft += fg.NumberOfCraft;
+				if (fg.PlayerCraft != 0)
 				{
-					results.Add((bFail ? "**" : "") + "Flight Group " + iFG + " is player craft.");
-					if (!bFail) playerFG = iFG;
+					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " is player craft.");
+					if (!bFail) playerFG = fg.Name;
 					bFail = true;
 				}
 			}
-			if (playerFG == -1)
-				results.Add("**No player craft.");
-			if (iCraft > 36)
+			if (playerFG == "") results.Add("**No player craft.");
+			if (iCraft > Platform.Xvt.Mission.CraftLimit)
 				results.Add("*More than 36 craft in mission, ensure all do not exist concurrently.");
 			bFail = false;
-			for (iFG = 1; iFG <= FG; iFG++)
+			foreach (Platform.Xvt.FlightGroup fg in mission.FlightGroups)
 			{
-				fsFile.Position = iFG * 1378 - 1125;
-				temp = fsFile.ReadByte();
-				if (temp == 255) results.Add("Flight Group " + iFG + " has basic AI." + (iFG == playerFG ? " (player)" : ""));
-			}
-			for (iFG = 1; iFG <= FG; iFG++)
-			{
-				fsFile.Position = iFG * 1378 - 1052;
-				temp = fsFile.ReadByte();
-				if (temp == 0)
+				if (fg.AI == 255 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType != 0x46 && fg.CraftType != 47 && (fg.CraftType < 0x50 || fg.CraftType > 0x59))
 				{
-					results.Add((bFail ? "*" : "") + "Flight Group " + iFG + " has no orders." + (iFG == playerFG ? " (player)" : ""));
+					results.Add("Flight Group " + fg.Name + " has basic AI." + (fg.Name == playerFG ? " (player)" : ""));
+				}
+				if (fg.Orders[0].Command == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType != 0x46 && fg.CraftType != 47 && (fg.CraftType < 0x50 || fg.CraftType > 0x59))
+				{
+					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " has no orders." + (fg.Name == playerFG ? " (player)" : ""));
 					bFail = true;
 				}
 			}
-			bFail = false;
-			fsFile.Position = 6324 + FG * 1378 + MESSAGE * 116;
-			temp = fsFile.ReadByte();
-			if (temp == 15) results.Add("*No briefing");
-			//check Descrip, different positions depending on platform
-			if (!BoP) fsFile.Position = fsFile.Length - 1024;
-			else fsFile.Position = fsFile.Length - 4096;
-			temp = fsFile.ReadByte();
-			if (temp == 0) results.Add("*No Mission description");
+			if (mission.Briefings[0].Events[0] == 9999 || mission.Briefings[0].Events[8] == 9999)
+				results.Add("*No briefing");
+			if (mission.MissionDescription == "") results.Add("*No Mission description");
 
 			string[] strRes = new string[results.Count];
 			for (int i = 0; i < strRes.Length; i++)
@@ -231,67 +208,50 @@ namespace Idmr.MissionVerify
 
 		private string[] XWA(FileStream fsFile)
 		{
-			BinaryReader br = new BinaryReader(fsFile);
-			int FG, MESSAGE, temp, iCraft = 0;	//consts and temp
-			int iFG;        //position counters
+			Platform.Xwa.Mission mission = new Platform.Xwa.Mission(fsFile);
+			fsFile.Close();
+			int iCraft = 0;	//consts and temp
 			List<string> results = new List<string>();
 			bool bFail = false;
-			int playerFG = -1;
-			fsFile.Position = 2;
-			FG = br.ReadInt16();
-			MESSAGE = br.ReadInt16();
-			if (FG > 100) results.Add("**Warning, over 100 Flight Groups, mission may be unstable.");
-			if (MESSAGE == 0)  results.Add("Mission has no in-flight messages.");
-			if (MESSAGE > 65) results.Add("**Warning, over 65 in-flight messages, mission may be unstable.");
-			fsFile.Position = 12916 + FG * 3646 + MESSAGE * 162;
-			temp = fsFile.ReadByte();
-			if (temp == 0) results.Add("No Mission Complete message.");
-			for (iFG = 1; iFG <= FG; iFG++)
+			string playerFG = "";
+			if (mission.FlightGroups.Count > Platform.Xwa.Mission.FlightGroupLimit)
+				results.Add("**Warning, over 100 Flight Groups, mission may be unstable.");
+			if (mission.Messages.Count == 0)  results.Add("Mission has no in-flight messages.");
+			if (mission.Messages.Count > Platform.Xwa.Mission.MessageLimit)
+				results.Add("**Warning, over 65 in-flight messages, mission may be unstable.");
+			if (mission.MissionSuccessful == "") results.Add("No Mission Complete message.");
+			foreach (Platform.Xwa.FlightGroup fg in mission.FlightGroups)
 			{
-				fsFile.Position = 5662 + iFG * 3646;
-				temp = fsFile.ReadByte();
-				iCraft += temp + 1;
-				fsFile.Position += 16;
-				temp = fsFile.ReadByte();
-				if (temp != 0)
+				iCraft += fg.NumberOfCraft;
+				if (fg.PlayerNumber != 0)
 				{
-					results.Add((bFail ? "**" : "") + "Flight Group " + iFG + " is player craft.");
-					if (!bFail) playerFG = iFG;
-					fsFile.Position += 69;
-					if (fsFile.ReadByte() == 0) 
-						results.Add("**Flight Group " + iFG + " has no mothership.");
+					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " is player craft.");
+					if (!bFail) playerFG = fg.Name;
+					if (fg.ArrivalCraft1 == 0) 
+						results.Add("**Flight Group " + fg.Name + " has no mothership.");
 					bFail = true;
 				}
 			}
-			if (playerFG == -1)
-				results.Add("**No player craft.");
-			if (iCraft > 96)
+			if (playerFG == "") results.Add("**No player craft.");
+			if (iCraft > Platform.Xwa.Mission.CraftLimit)
 				results.Add("*More than 96 craft. Ensure not all exist in the same region concurrently.");
 			bFail = false;
-			for (iFG = 1; iFG <= FG; iFG++)
+			foreach (Platform.Xwa.FlightGroup fg in mission.FlightGroups)
 			{
-				fsFile.Position = 5668 + iFG * 3646;
-				temp = fsFile.ReadByte();
-				if (temp == 0) results.Add("Flight Group " + iFG + " has basic AI." + (iFG == playerFG ? " (player)" : ""));
-			}
-			for (iFG = 1; iFG <= FG; iFG++)
-			{
-				fsFile.Position = 5756 + iFG * 3646;
-				temp = fsFile.ReadByte();
-				if (temp == 0)
+				if (fg.AI == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && (fg.CraftType < 0x46 || fg.CraftType > 0x4A) && (fg.CraftType < 0x50 || fg.CraftType > 0x59) && fg.CraftType != 0x86 && (fg.CraftType < 0x98 || fg.CraftType > 0x9B) && fg.CraftType != 0xB7)
 				{
-					results.Add((bFail ? "*" : "") + "Flight Group " + iFG + " has no orders." + (iFG == playerFG ? " (player)" : ""));
+					results.Add("Flight Group " + fg.Name + " has basic AI." + (fg.Name == playerFG ? " (player)" : ""));
+				}
+				if (fg.Orders[fg.Waypoints[0].Region, 0].Command == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && (fg.CraftType < 0x46 || fg.CraftType > 0x4A) && (fg.CraftType < 0x50 || fg.CraftType > 0x59) && fg.CraftType != 0x86 && (fg.CraftType < 0x98 || fg.CraftType > 0x9B) && fg.CraftType != 0xB7)
+				{
+					results.Add((bFail ? "*" : "") + "Flight Group " + fg.Name + " has no orders." + (fg.Name == playerFG ? " (player)" : ""));
 					bFail = true;
 				}
 			}
-			bFail = false;
-			fsFile.Position = 17760 + FG * 3646 + MESSAGE * 162;
-			temp = fsFile.ReadByte();
-			if (temp == 15) 	results.Add("*No briefing.");
-			//check Descrip
-			fsFile.Position = fsFile.Length - 12288;
-			temp = fsFile.ReadByte();
-			if (temp == 0) 	results.Add("*No Mission description.");
+
+			if (mission.Briefings[0].Events[0] == 9999 || mission.Briefings[0].Events[8] == 9999)
+				results.Add("*No briefing");
+			if (mission.MissionDescription == "") results.Add("*No Mission description.");
 
 			string[] strRes = new string[results.Count];
 			for (int i = 0; i < strRes.Length; i++)
