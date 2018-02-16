@@ -3,13 +3,13 @@
  * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.0 (pending)
+ * Version: 2.0
  */
 
 /* CHANGELOG
-* v2.0,
-* [UPD] Converted to current standards
-*/
+ * v2.0, 180215
+ * [UPD] Converted to current standards
+ */
 
 
 using System;

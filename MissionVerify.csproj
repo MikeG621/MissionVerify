@@ -122,6 +122,9 @@
       <DependentUpon>ResultsForm.cs</DependentUpon>
     </Compile>
     <Content Include="App.ico" />
+    <None Include="Readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="MPL.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -153,13 +156,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MissionVerify.config">
+    <None Include="MissionVerify.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent />
-    <PostBuildEvent>attrib +r "$(SolutionDir)$(OutDir)$(TargetName).config"</PostBuildEvent>
+    <PostBuildEvent>attrib +r "$(SolutionDir)$(OutDir)$(TargetFileName).config"</PostBuildEvent>
   </PropertyGroup>
 </Project>

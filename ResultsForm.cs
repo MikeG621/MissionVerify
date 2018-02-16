@@ -3,14 +3,14 @@
  * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.0 (pending)
+ * Version: 2.0
  */
 
 /* CHANGELOG
- * v2.0,
+ * v2.0, 180215
  * [UPD] Converted to current standards
  * [UPD] Implemented Idmr.Platform
- * [UPD] Removed Containers, probes, satellites, backdrops, etc from AI and Orders checks
+ * [UPD YOGEME/#15] Removed Containers, probes, satellites, backdrops, etc from AI and Orders checks
  * [UPD #3] AI messages changed "no AI" to "basic AI", removed failure indicator
  * [UPD #2] results string[] replaced with List<string>
  * [UPD] Multiple player FGs now flagged as * instead of ** due to advanced creation techniques

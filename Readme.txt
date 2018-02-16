@@ -2,7 +2,7 @@
 ===============================================================================
 Author: Michael Gaisser (mjgaisser@gmail.com)
 Version 2.0
-Date: 2018.02.XX
+Date: 2018.02.15
 ===============================================================================
 
 This utility performs simple quality verification steps on X-wing series
@@ -11,7 +11,7 @@ mission files.
 ===================
 VERSION HISTORY
 
-v2.0 - XX Feb 2018
+v2.0 - 15 Feb 2018
  - Code rewrite
  - Implemented Idmr.Platform
  - Removed Containers, backdrops, etc from AI and Orders checks [YOGEME/#15]
@@ -26,7 +26,8 @@ The program is primarily intended to be run automatically while saving a
 mission in YOGEME. It can also be run manually, with a drag-and-drop region
 to drop custom missions from an explorer window.
 
-The following checks and categorizations are currently implemented:
+The following checks and categorizations are currently implemented. More
+rigorous checks may be included at a later time.
 
 -=ALL PLATFORMS=-
 -Note

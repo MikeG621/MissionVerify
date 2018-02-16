@@ -3,39 +3,18 @@
  * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.0 (pending)
+ * Version: 2.0
  */
 
 /* CHANGELOG
-* v2.0,
-* [UPD] Converted to current standards
-*/
+ * v2.0, 180215
+ * [UPD] Converted to current standards
+ */
 
 using System.Windows.Forms;
 
 namespace Idmr.MissionVerify
 {
-	/// <summary>
-	/// This program is to be used as a validation check for custom missions
-	/// for the X-wing series. A mission that fails this check will not be 
-	/// eligible for use in the Combat Chamber
-	/// 
-	/// Current list of errors:
-	/// 
-	/// **More than MAX FGs
-	/// No messages
-	/// *More than MAX MESS
-	/// (**) player craft
-	/// ** No player craft
-	/// *More than MAX Craft
-	/// (*) No AI
-	/// (*) No orders
-	/// **player craft has no mothership (XWA)
-	/// **Incompletable Global Goals
-	/// *No briefing
-	/// *No pre-mission officer questions/Mission description
-	/// No post-mission questions
-	/// </summary>
 	public partial class MainForm : Form
 	{
 		public MainForm()
