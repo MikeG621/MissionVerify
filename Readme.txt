@@ -1,8 +1,8 @@
 ﻿MissionVerify
 ===============================================================================
 Author: Michael Gaisser (mjgaisser@gmail.com)
-Version 2.0
-Date: 2018.02.15
+Version 2.0.1
+Date: 2020.11.29
 ===============================================================================
 
 This utility performs simple quality verification steps on X-wing series
@@ -10,6 +10,9 @@ mission files.
 
 ===================
 VERSION HISTORY
+
+v2.0.1 - 29 Nov 2020
+ - Rebuild with newer version of Idmr.Platform
 
 v2.0 - 15 Feb 2018
  - Code rewrite
@@ -60,7 +63,7 @@ rigorous checks may be included at a later time.
  * Player FlightGroup missing mothership
 
 ===============================================================================
-Copyright © 2018 Michael Gaisser
+Copyright © 2020 Michael Gaisser
 This program and related files are licensed under the Mozilla Public License.
 See License.txt for the full text. If for some reason the license was not
 distributed with this program, you can obtain the full text of the license at
