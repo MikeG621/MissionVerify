@@ -3,11 +3,12 @@
  * Copyright (C) 2006-2021 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.0+
+ * Version: 2.1
  */
 
 /* CHANGELOG
- * [ADD] Trigger "OR true" and "AND false" detection. NOTE: checking 1ao2 and 3ao4, but not 12ao34
+ * v2.1, 210315
+ * [ADD] Trigger "OR true" and "AND false" detection. NOTE: checking 1ao2 and 3ao4, but not 12ao34 [YOGEME/#48]
  * v2.0, 180215
  * [UPD] Converted to current standards
  * [UPD] Implemented Idmr.Platform

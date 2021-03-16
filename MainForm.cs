@@ -3,7 +3,7 @@
  * Copyright (C) 2006-2018 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.0
+ * Version: 2.1
  */
 
 /* CHANGELOG
@@ -30,7 +30,7 @@ namespace Idmr.MissionVerify
 				MessageBox.Show("Please check only one file at a time.", "Error");
 				return;
 			}
-			ResultsForm frmRes = new ResultsForm(args[0]);
+			_ = new ResultsForm(args[0]);
 		}
 
 		private void lblMain_DragEnter(object sender, DragEventArgs e)

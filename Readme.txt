@@ -1,8 +1,8 @@
 ﻿MissionVerify
 ===============================================================================
 Author: Michael Gaisser (mjgaisser@gmail.com)
-Version 2.0.1
-Date: 2020.11.29
+Version 2.1
+Date: 2020.03.15
 ===============================================================================
 
 This utility performs simple quality verification steps on X-wing series
@@ -11,6 +11,9 @@ mission files.
 ===================
 VERSION HISTORY
 
+v2.1 - 15 Mar 2021
+ - Added "OR true" and "AND false" trigger detection for 1AO2 and 3OR4 triggers [YOGEME/#48]
+ 
 v2.0.1 - 29 Nov 2020
  - Rebuild with newer version of Idmr.Platform
 
