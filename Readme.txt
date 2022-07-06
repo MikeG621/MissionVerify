@@ -1,8 +1,8 @@
 ﻿MissionVerify
 ===============================================================================
 Author: Michael Gaisser (mjgaisser@gmail.com)
-Version 2.1
-Date: 2020.03.15
+Version 2.2
+Date: 2022.07.06
 ===============================================================================
 
 This utility performs simple quality verification steps on X-wing series
@@ -10,6 +10,10 @@ mission files.
 
 ===================
 VERSION HISTORY
+
+v2.2 - 06 Jul 2022
+ - XWA order check now scans all orders instead of just O1 in SP1's region
+ - Limit messages now dynamically use the actual limits
 
 v2.1 - 15 Mar 2021
  - Added "OR true" and "AND false" trigger detection for 1AO2 and 3OR4 triggers [YOGEME/#48]
@@ -48,6 +52,7 @@ rigorous checks may be included at a later time.
  * Default Briefing duration
  * No Briefing events
  * No Mission description/pre-flight questions.
+ * Trigger logical errors
  
 -Failure
  * Mission FlightGroup limit exceeded
@@ -59,14 +64,14 @@ rigorous checks may be included at a later time.
  * No post-mission questions
  
 -Failure
- * Logical error in Global Goals guarantees FALSE result
+ * Global Goals logical error
  
 -=XWA=-
 -Failure
  * Player FlightGroup missing mothership
 
 ===============================================================================
-Copyright © 2020 Michael Gaisser
+Copyright © 2022 Michael Gaisser
 This program and related files are licensed under the Mozilla Public License.
 See License.txt for the full text. If for some reason the license was not
 distributed with this program, you can obtain the full text of the license at
