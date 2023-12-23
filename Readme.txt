@@ -12,7 +12,7 @@ mission files.
 VERSION HISTORY
 
 v2.2.1 - 23 Dec 2033
- - Fixed XvT/XWA Dep And/Or was checking Arr 12AO34
+ - Fixed XvT/XWA Dep And/Or was checking Arr 12AO34 [YOGEME/#99]
  - Fixed XvT/XWA Global Goal triggers checking 1/2 twice instead of 1/2 and 3/4
 
 v2.2 - 06 Jul 2022
