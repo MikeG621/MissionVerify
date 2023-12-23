@@ -1,12 +1,14 @@
 /*
  * MissionVerify.exe, X-wing series mission validation utility, TIE95-XWA
- * Copyright (C) 2006-2022 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2006-2023 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.2
+ * Version: 2.2.1
  */
 
 /* CHANGELOG
+ * v2.2.1, 231223
+ * [FIX] Departure AO was looking at 12ao34, Global Goals 3 and 4 were looking at 1 and 2.
  * v2.2, 220706
  * [UPD] XWA order check now scans all orders instead of just O1 in SP1's region
  * [UPD] Limit messages now dynamically use the actual limits
@@ -51,11 +53,11 @@ namespace Idmr.MissionVerify
 					break;
 				case MissionFile.Platform.XvT:
 					lblName.Text = "XvT " + file;
-					txtResults.Lines = xvt(fsFile, false);
+					txtResults.Lines = xvt(fsFile);
 					break;
 				case MissionFile.Platform.BoP:
 					lblName.Text = "BoP " + file;
-					txtResults.Lines = xvt(fsFile, true);
+					txtResults.Lines = xvt(fsFile);
 					break;
 				case MissionFile.Platform.XWA:
 					lblName.Text = "XWA " + file;
@@ -147,7 +149,7 @@ namespace Idmr.MissionVerify
 			return strRes;
 		}
 
-		private string[] xvt(FileStream fsFile, bool bop)
+		private string[] xvt(FileStream fsFile)
 		{
 			Platform.Xvt.Mission mission = new Platform.Xvt.Mission(fsFile);
 			fsFile.Close();
@@ -185,7 +187,7 @@ namespace Idmr.MissionVerify
 				}
 				if (isBadTrigger(fg.ArrDepTriggers[0], fg.ArrDepTriggers[1], fg.ArrDepAO[0]) ||
 					isBadTrigger(fg.ArrDepTriggers[2], fg.ArrDepTriggers[3], fg.ArrDepAO[1]) ||
-					isBadTrigger(fg.ArrDepTriggers[4], fg.ArrDepTriggers[5], fg.ArrDepAO[2]))
+					isBadTrigger(fg.ArrDepTriggers[4], fg.ArrDepTriggers[5], fg.ArrDepAO[3]))
 					results.Add("*Flight Group " + fg.Name + " has ArrDep trigger errors.");
 				if (fg.Orders[0].Command == 0 && (fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && fg.CraftType != 0x46 && fg.CraftType != 47 && (fg.CraftType < 0x50 || fg.CraftType > 0x59))
 				{
@@ -208,7 +210,7 @@ namespace Idmr.MissionVerify
 				for (int g = 0; g < 3; g++)
 				{
 					if (isBadTrigger(mission.Globals[t].Goals[g].Triggers[0].GoalTrigger, mission.Globals[t].Goals[g].Triggers[1].GoalTrigger, mission.Globals[t].Goals[g].T1AndOrT2) ||
-						isBadTrigger(mission.Globals[t].Goals[g].Triggers[0].GoalTrigger, mission.Globals[t].Goals[g].Triggers[1].GoalTrigger, mission.Globals[t].Goals[g].T1AndOrT2))
+						isBadTrigger(mission.Globals[t].Goals[g].Triggers[2].GoalTrigger, mission.Globals[t].Goals[g].Triggers[3].GoalTrigger, mission.Globals[t].Goals[g].T3AndOrT4))
 						results.Add("*Team " + (t + 1) + " " + (g == 0 ? "Primary" : (g == 1 ? "Prevent" : "Secondary")) + " Global goals have trigger errors.");
 				}
 			}
@@ -262,7 +264,7 @@ namespace Idmr.MissionVerify
 				}
 				if (isBadTrigger(fg.ArrDepTriggers[0], fg.ArrDepTriggers[1], fg.ArrDepAndOr[0]) ||
 					isBadTrigger(fg.ArrDepTriggers[2], fg.ArrDepTriggers[3], fg.ArrDepAndOr[1]) ||
-					isBadTrigger(fg.ArrDepTriggers[4], fg.ArrDepTriggers[5], fg.ArrDepAndOr[2]))
+					isBadTrigger(fg.ArrDepTriggers[4], fg.ArrDepTriggers[5], fg.ArrDepAndOr[3]))
 					results.Add("*Flight Group " + fg.Name + " has ArrDep trigger errors.");
 				if ((fg.CraftType < 0x1A || fg.CraftType > 0x1D) && (fg.CraftType < 0x37 || fg.CraftType > 0x3B) && (fg.CraftType < 0x46 || fg.CraftType > 0x4A) && (fg.CraftType < 0x50 || fg.CraftType > 0x59) && fg.CraftType != 0x86 && (fg.CraftType < 0x98 || fg.CraftType > 0x9B) && fg.CraftType != 0xB7)
                 {
@@ -301,7 +303,7 @@ namespace Idmr.MissionVerify
 				for (int g = 0; g < 3; g++)
 				{
 					if (isBadTrigger(mission.Globals[t].Goals[g].Triggers[0], mission.Globals[t].Goals[g].Triggers[1], mission.Globals[t].Goals[g].T1AndOrT2) ||
-						isBadTrigger(mission.Globals[t].Goals[g].Triggers[0], mission.Globals[t].Goals[g].Triggers[1], mission.Globals[t].Goals[g].T1AndOrT2))
+						isBadTrigger(mission.Globals[t].Goals[g].Triggers[2], mission.Globals[t].Goals[g].Triggers[3], mission.Globals[t].Goals[g].T3AndOrT4))
 						results.Add("*Team " + (t + 1) + " " + (g == 0 ? "Primary" : (g == 1 ? "Prevent" : "Secondary")) + " Global goals have trigger errors.");
 				}
 			}
@@ -318,6 +320,7 @@ namespace Idmr.MissionVerify
 			return strRes;
 		}
 
+		/// <summary>Looks for "Or TRUE" and "And FALSE" conditions</summary>
 		bool isBadTrigger(BaseTrigger trig1, BaseTrigger trig2, bool andOr)
 		{
 			// reminder: AND = false, OR = true

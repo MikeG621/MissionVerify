@@ -1,9 +1,9 @@
 /*
  * MissionVerify.exe, X-wing series mission validation utility, TIE95-XWA
- * Copyright (C) 2006-2022 Michael Gaisser (mjgaisser@gmail.com)
+ * Copyright (C) 2006-2023 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.2
+ * Version: 2.2.1
  */
 
 using System.Reflection;
@@ -14,11 +14,11 @@ using System.Reflection;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Mission Verify")]
-[assembly: AssemblyDescription("Checks the validity of mission files for submission to the Combat Chamber")]
+[assembly: AssemblyDescription("Looks for common errors in mission files")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Imperial Department of Military Research")]
 [assembly: AssemblyProduct("Mission Verify")]
-[assembly: AssemblyCopyright("Copyright © Michael Gaisser 2006-2022")]
+[assembly: AssemblyCopyright("Copyright © Michael Gaisser 2006-2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,9 +33,9 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.2.*")]
-[assembly: AssemblyFileVersion("2.2.0")]
-[assembly: AssemblyInformationalVersion("2.2 final")]
+[assembly: AssemblyVersion("2.2.1.*")]
+[assembly: AssemblyFileVersion("2.2.1")]
+[assembly: AssemblyInformationalVersion("2.2.1 final")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

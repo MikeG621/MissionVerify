@@ -1,8 +1,8 @@
 ﻿MissionVerify
 ===============================================================================
 Author: Michael Gaisser (mjgaisser@gmail.com)
-Version 2.2
-Date: 2022.07.06
+Version 2.2.1
+Date: 2023.12.23
 ===============================================================================
 
 This utility performs simple quality verification steps on X-wing series
@@ -10,6 +10,10 @@ mission files.
 
 ===================
 VERSION HISTORY
+
+v2.2.1 - 23 Dec 2033
+ - Fixed XvT/XWA Dep And/Or was checking Arr 12AO34
+ - Fixed XvT/XWA Global Goal triggers checking 1/2 twice instead of 1/2 and 3/4
 
 v2.2 - 06 Jul 2022
  - XWA order check now scans all orders instead of just O1 in SP1's region
