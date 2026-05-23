@@ -10,9 +10,8 @@ mission files.
 
 ## Latest Release
 
-#### v2.4 - 28 Mar 2026
- - XWA objects no longer counted for craft start [#4].
- - Code cleanup, .NET target updated.
+#### v2.4.1 - 22 May 2026
+ - Fixed XWA player mothership looking at craft number instead of method.
 ---
 ### Additional Information
 
@@ -62,6 +61,10 @@ rigorous checks may be included at a later time.
 
  ---
 ### Version History
+#### v2.4 - 28 Mar 2026
+ - XWA objects no longer counted for craft start [#4].
+ - Code cleanup, .NET target updated.
+
 #### v2.3 - 06 Jan 2025
 Apparently forgot to commit this one, but was packaged with YOGEME after this date.
  - Rebuild with changes for Idmr.Platform v7. [[YOGEME#115](https://github.com/MikeG621/YOGEME/issues/115)]

@@ -167,6 +167,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent />
-    <PostBuildEvent>attrib +r "$(SolutionDir)$(OutDir)$(TargetFileName).config"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -3,10 +3,12 @@
  * Copyright (C) 2006-2026 Michael Gaisser (mjgaisser@gmail.com)
  * Licensed under the MPL v2.0 or later
  * 
- * Version: 2.4
+ * Version: 2.4.1
  */
 
 /* CHANGELOG
+ * v2.4.1, 260522
+ * [FIX] XWA player mothership was checking craft# instead of method
  * v2.4, 260328
  * [UPD #4] XWA objects no longer counted for craft limit
  * v2.3, 250106
@@ -228,7 +230,7 @@ namespace Idmr.MissionVerify
 				{
 					results.Add((duplicate ? "*" : "") + $"Flight Group {fg.Name} is player craft.");
 					if (!duplicate) playerFG = fg.Name;
-					if (fg.ArrivalMothership == 0) 
+					if (fg.ArriveViaMothership == 0) 
 						results.Add($"**Flight Group {fg.Name} has no mothership.");
 					duplicate = true;
 				}
